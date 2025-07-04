@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import TodoCss from './Todo.module.css';
 import {toast} from 'react-hot-toast'
 import Task from './Task';
@@ -15,6 +15,8 @@ const Todo = () => {
   const[complete,setComplete]=useState("0")
   const[remaining,setRemaining]=useState("1")
   const[totalTask,setTotalTask]=useState("1");
+  const darkMode=useRef();
+  const darkModeIcon= useRef();
 
 
   function handleForm(e) {
@@ -87,11 +89,33 @@ const Todo = () => {
     localStorage.setItem("todo_items",JSON.stringify(copyOFAllTodo));
 },[alltodo])
 
+function handleDarkMode(){
+  const bgColor=darkMode.current.style.backgroundColor;
+  if(bgColor === ""||bgColor==="white"){
+    darkMode.current.style.backgroundColor='black';
+    darkMode.current.style.color="white";
+    darkModeIcon.current.className="bi bi-toggle-on";
+    toast.success("Dark mode enabled 😎")
+  }
+  else{
+
+     darkMode.current.style.backgroundColor='white';
+    darkMode.current.style.color="black";
+     darkModeIcon.current.className="bi bi-toggle-off";
+     toast.error("Dark mode disabled 😴")
+    
+  }
+}
+
+function handleClearAll(){
+  setAllTodo([]);
+}
+
   return (
-    <div>
+    <div ref={darkMode} className={TodoCss.main}>
       <div className={TodoCss.main}>
         <div>
-          <h1>Todo Application{complete}/{remaining}</h1>
+          <h1>Todo Application <i className="bi bi-toggle-off" onClick={handleDarkMode} ref={darkModeIcon}></i></h1>
           <Task remaining={remaining} complete={complete} totalTask={totalTask}/>
           <form onSubmit={handleForm}>
             <input
@@ -134,13 +158,14 @@ const Todo = () => {
                       handleDelete(index);
                     }}
                   ></i>
-                  <i class="bi bi-pencil-square float-end text-success" onClick={()=>{
+                  <i className="bi bi-pencil-square float-end text-success" onClick={()=>{
                     handleUpdate(index)
                   }}></i>
                 </li>
               ))}
             </ul>
           </form>
+          <button className={TodoCss.btn_clear}onClick={handleClearAll}>Clear All Task</button>
         </div>
       </div>
     </div>

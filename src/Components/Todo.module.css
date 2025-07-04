@@ -4,7 +4,6 @@
     display: flex;
     justify-content: center;
     align-items: center ;
-    background-color: rgb(157, 153, 153);
   
 }
 .todo{
@@ -25,6 +24,16 @@ color: white;
 padding: 6px;
 border-top-right-radius: 8px;
 border-bottom-left-radius: 8px;
+cursor: pointer;
+}
+.btn_clear{
+border: none;
+width: 300px;
+background-color: rgb(222, 71, 71);
+color: white;
+padding: 6px;
+font-weight: bold;
+border-radius: 7px;
 cursor: pointer;
 }
 ul{

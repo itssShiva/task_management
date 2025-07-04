@@ -1,5 +1,5 @@
 .task_container{
-    border: 2px solid white;
+    border: 2px solid rgb(82, 80, 80);
     border-radius: 8px;
     width: 400px;
     display:flex ;
@@ -9,14 +9,13 @@
 }
 .task_heading{
     font-size: 25px;
-    color: white;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .task_complete{
-    background-color: yellow;
+    background-color: brown;
     width: 100px;
     height: 100px;
     display: flex;
