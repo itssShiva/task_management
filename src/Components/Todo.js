@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TodoCss from './Todo.module.css';
 import {toast} from 'react-hot-toast'
+import Task from './Task';
 
 const Todo = () => {
-  const todoData = [
-  
+  const todoData =  JSON.parse(localStorage.getItem("todo_items"))||[
+  {
+    todoTask:"Buy Car",complete:false
+  }
   ];
 
   const [task, setTask] = useState();
   const [alltodo, setAllTodo] = useState(todoData);
+  const[complete,setComplete]=useState("0")
+  const[remaining,setRemaining]=useState("1")
+  const[totalTask,setTotalTask]=useState("1");
+
 
   function handleForm(e) {
     e.preventDefault();
@@ -35,9 +42,9 @@ const Todo = () => {
   function handleCheck(id) {
     const copyOFAllTodo = [...alltodo];
     copyOFAllTodo[id].complete = !copyOFAllTodo[id].complete;
-    setAllTodo(copyOFAllTodo);
-    setTask("");
+    setAllTodo(copyOFAllTodo); 
   }
+
 
   function handleDelete(id) {
     const copyOFAllTodo = [...alltodo];
@@ -56,13 +63,36 @@ const Todo = () => {
    let newObj={todoTask:newTask,complete:false}
    copyOFAllTodo.splice(id,1,newObj);
    setAllTodo(copyOFAllTodo)
+   toast.success("Task updated successfully");
   }
+
+
+  useEffect(()=>{
+
+  const copyOFAllTodo = [...alltodo];
+  const completeTasks=copyOFAllTodo.filter((value,index)=>{
+      return value.complete;
+    });
+
+    const remainingTasks=copyOFAllTodo.filter((value,index)=>{ 
+      return !value.complete;
+    });
+    const totalTask=copyOFAllTodo.filter((value,index)=>{
+      return value
+    })
+     setComplete(completeTasks.length);
+    setRemaining(remainingTasks.length);
+    setTotalTask(totalTask.length)
+
+    localStorage.setItem("todo_items",JSON.stringify(copyOFAllTodo));
+},[alltodo])
 
   return (
     <div>
       <div className={TodoCss.main}>
         <div>
-          <h1>Todo Application</h1>
+          <h1>Todo Application{complete}/{remaining}</h1>
+          <Task remaining={remaining} complete={complete} totalTask={totalTask}/>
           <form onSubmit={handleForm}>
             <input
               type="text"
